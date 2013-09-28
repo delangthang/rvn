@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
+<!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
+	<header>
+		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
+		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
+		<title lang="en"><![CDATA[Limit Post as Count per Forum]]></title>
+		<title lang="fr"><![CDATA[Limite du nombre de message par forum]]></title>
+		<description lang="en"><![CDATA[This mod will allow you to limit the count of messages and/or topics of an user per forum.
+This can be useful if you wish to create a permission that would force the member to get VIP access to post more post/topic in the forum
+Of course these restrictions can be ignored via forum permissions]]></description>
+		<description lang="fr"><![CDATA[Ce mod vous permettras de limiter le nombre de message et/ou de sujets d'un utilisateur par forum.
+Cela peux-être utile si vous désirer créer une permission qui pousserais les membre à obtenir un accès VIP pour poster plus de message dans le forum
+La limitation peux bien sûr être ignoré via des permissions de forum.]]></description>
+		<author-group>
+			<author>
+				<realname><![CDATA[Georges.L]]></realname>
+				<username><![CDATA[Geolim4]]></username>
+				<homepage><![CDATA[http://geolim4.com]]></homepage>
+			</author>
+		</author-group>
+		<mod-version>1.0.1</mod-version>
+		<installation>
+			<level>easy</level>
+			<time>300</time>
+			<target-version>3.0.11</target-version>
+		</installation>
+		<link-group>
+			<link type="contrib" href="contrib/fr.xml" lang="en">French Translation</link>
+			<link type="contrib" href="contrib/fr.xml" lang="fr">Traduction Française</link>
+			<link type="contrib" href="contrib/update_1.0.0_to_1.0.1.xml" lang="en">Update from 1.0.0 to 1.0.1</link>
+			<link type="contrib" href="contrib/update_1.0.0_to_1.0.1.xml" lang="fr">Mise à jour 1.0.0 vers 1.0.1</link>
+		</link-group>
+	</header>
+	<action-group>
+		<copy>
+			<file from="root/umil/*.*" to="umil/*.*"/>
+			<file from="root/lpacpf_install.php" to="lpacpf_install.php"/>
+		</copy>
+		<open src="posting.php">
+			<edit>
+				<find><![CDATA[if (!$post_data)]]></find>
+				<comment lang="en"><![CDATA[Around line 200~~]]></comment>
+				<comment lang="fr"><![CDATA[Vers la ligne 200~~]]></comment>
+				<action type="before-add"><![CDATA[//MOD BEGIN: Limit Post as Count
+if ( in_array($mode, array('post', 'reply', 'quote')) )
+{
+	$is_topic_unauthed = (!$auth->acl_get('f_topic_limit', $forum_id) && $post_data['forum_topic_limit'] && $mode == 'post') ? true : false;
+	$is_post_unauthed = (!$auth->acl_get('f_post_limit', $forum_id) && $post_data['forum_post_limit']) ? true : false;
+	$post_topic_rest = '';
+	$post_rest = $topic_rest = 0;
+	if ( $is_post_unauthed || $is_topic_unauthed )
+	{
+		//Run setup...
+		$user->setup('posting');
+
+		$sql = 'SELECT';
+		if ( $is_topic_unauthed )
+		{
+			$sql .= ' COUNT(' . ( ($is_topic_unauthed && $is_post_unauthed) ? 'DISTINCT t.' : '' ) . 'topic_id) AS topics_count';
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ', ';
+		}
+		if ( $is_post_unauthed )
+		{
+			$sql .= ' COUNT(';
+			if ( $is_topic_unauthed && $is_post_unauthed )
+			{
+				$sql .= 'DISTINCT p.';
+			}
+			$sql .= 'post_id) AS posts_count';
+		}
+		$sql .= ' FROM ';
+		if ( $is_topic_unauthed )
+		{
+			$sql .= TOPICS_TABLE;
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ' t, ';
+		}
+		if ( $is_post_unauthed )
+		{
+			$sql .= POSTS_TABLE;
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ' p';
+		}
+		$sql .= ' WHERE ';
+		if ( $is_topic_unauthed )
+		{
+			$sql .= 'topic_poster = ' . (int) $user->data['user_id'];
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ' AND ';
+		}
+		if ( $is_post_unauthed )
+		{
+			$sql .= ' poster_id = ' . (int) $user->data['user_id'];
+		}
+		$sql .= ' AND ';
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= 't.forum_id = ' . (int) $forum_id . ' AND p.forum_id = ' . (int) $forum_id;
+		}
+		else
+		{
+			$sql .= 'forum_id = ' . (int) $forum_id;
+		}
+		$result = $db->sql_query_limit($sql, 1);
+		$data_count = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+		
+		if ( $post_data['forum_topic_limit'] && isset($data_count['topics_count']) && $data_count['topics_count'] >= $post_data['forum_topic_limit'] )
+		{
+			trigger_error($user->lang('ERROR_TOPIC' . ( ($post_data['forum_topic_limit'] > 1) ? 'S' : '' ) . '_COUNT', $post_data['forum_topic_limit']), E_USER_WARNING);
+		}
+
+		if ( $post_data['forum_post_limit'] && isset($data_count['posts_count']) && $data_count['posts_count'] >= $post_data['forum_post_limit'] )
+		{
+			trigger_error($user->lang('ERROR_POST' . ( ( $post_data['forum_post_limit'] > 1) ? 'S' : '' ) . '_COUNT', $post_data['forum_post_limit']), E_USER_WARNING);
+		}
+
+		if ( $is_post_unauthed && $is_topic_unauthed && $mode == 'post')
+		{
+			$post_rest = ($post_data['forum_post_limit'] - $data_count['posts_count']);
+			$topic_rest = ($post_data['forum_topic_limit'] - $data_count['topics_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_POST' . ( ( $post_rest > 1 ) ? 'S' : '' ) . '_TOPIC' . ( ( $topic_rest > 1 ) ? 'S' : '' ) . '_REST', $topic_rest, $post_rest));
+		}
+		else if( !$is_post_unauthed && $is_topic_unauthed && $mode == 'post')
+		{
+			$topic_rest = ($post_data['forum_topic_limit'] - $data_count['topics_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_TOPIC' . ( ( $topic_rest > 1 ) ? 'S' : '' ) . '_REST', $topic_rest));
+		}
+		else if( $is_post_unauthed && !$is_topic_unauthed )
+		{
+			$post_rest = ($post_data['forum_post_limit'] - $data_count['posts_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_POST' . ( ( $post_rest > 1 ) ? 'S' : '' ) . '_REST', $post_rest));
+		}
+	}
+}
+//MOD END: Limit Post as Count]]></action>
+			</edit>
+		</open>
+		<open src="adm/style/acp_forums.html">
+			<edit>
+				<find><![CDATA[		<dl>
+			<dt><label for="topics_per_page">{L_FORUM_TOPICS_PAGE}:</label><br /><span>{L_FORUM_TOPICS_PAGE_EXPLAIN}</span></dt>
+			<dd><input type="text" id="topics_per_page" name="topics_per_page" value="{TOPICS_PER_PAGE}" size="4" maxlength="4" /></dd>
+		</dl>]]></find>
+				<action type="after-add"><![CDATA[		<!--//Begin MOD: Limit Post as Count-->
+		<dl>
+			<dt><label for="forum_topic_limit">{L_FORUM_MAX_TOPICS}:</label><br /><span>{L_FORUM_MAX_TP_EXPLAIN}</span></dt>
+			<dd><input type="text" id="forum_topic_limit" name="forum_topic_limit" value="{FORUM_TOPIC_LIMIT}" maxlength="4" size="4" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="forum_post_limit">{L_FORUM_MAX_POSTS}:</label><br /><span>{L_FORUM_MAX_TP_EXPLAIN}</span></dt>
+			<dd><input type="text" id="forum_post_limit" name="forum_post_limit" value="{FORUM_POST_LIMIT}" maxlength="4" size="4" /></dd>
+		</dl>
+		<!--//End MOD: Limit Post as Count-->]]></action>
+			</edit>
+		</open>
+		<open src="includes/acp/acp_forums.php">
+			<edit>
+				<find><![CDATA[					// On add, add empty forum_options... else do not consider it (not updating it)]]></find>
+				<action type="before-add"><![CDATA[				//Begin MOD: Limit Post as Count
+					if ( $forum_data['forum_type'] == FORUM_POST )
+					{
+						$forum_data += array(
+							'forum_topic_limit'			=> request_var('forum_topic_limit', 0),
+							'forum_post_limit'			=> request_var('forum_post_limit', 0),
+						);
+						if ($forum_data['forum_topic_limit'] > $forum_data['forum_post_limit'] && !empty($forum_data['forum_post_limit']) )
+						{
+							trigger_error($user->lang['FORUM_MAX_TOPICS_ERROR'] . adm_back_link($this->u_action . '&amp;parent_id=' . $this->parent_id . "&amp;f={$forum_id}&amp;action=edit"), E_USER_WARNING);
+						}
+					}
+				//End MOD: Limit Post as Count]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[					'S_CAN_COPY_PERMISSIONS'	=> ($action != 'edit' || empty($forum_id) || ($auth->acl_get('a_fauth') && $auth->acl_get('a_authusers') && $auth->acl_get('a_authgroups') && $auth->acl_get('a_mauth'))) ? true : false,
+				));]]></find>
+				<action type="after-add"><![CDATA[				//Begin MOD: Limit Post as Count
+				$template->assign_vars( array(
+						'FORUM_TOPIC_LIMIT'			=> $forum_data['forum_topic_limit'],
+						'FORUM_POST_LIMIT'			=> $forum_data['forum_post_limit'],
+				));
+				//End MOD: Limit Post as Count]]></action>
+			</edit>
+		</open>
+		<open src="language/en/posting.php">
+			<edit>
+				<find><![CDATA[	'EMPTY_REMOTE_DATA'			=> 'File could not be uploaded, please try uploading the file manually.',]]></find>
+				<action type="after-add"><![CDATA[	//Begin MOD: Limit Post as Count
+	'ERROR_POST_COUNT'			=> 'You cannot post new post here, because you have reached your count of %s allowed post in this forum',
+	'ERROR_TOPIC_COUNT'			=> 'You cannot post new topic here, because you have reached your count of %s allowed topic in this forum',
+	'ERROR_POSTS_COUNT'			=> 'You cannot post new post here, because you have reached your count of %s allowed posts in this forum',
+	'ERROR_TOPICS_COUNT'		=> 'You cannot post new topics here, because you have reached your count of %s allowed topics in this forum',
+	'ERROR_POST_REST'			=> 'You have <strong class="error">%s</strong> free post on this forum before being disallowed to post new post',
+	'ERROR_POSTS_REST'			=> 'You have <strong class="error">%s</strong> free posts on this forum before being disallowed to post new posts',
+	'ERROR_TOPIC_REST'			=> 'You have <strong class="error">%s</strong> free topic on this forum before being disallowed to post new topic',
+	'ERROR_TOPICS_REST'			=> 'You have <strong class="error">%s</strong> free topics on this forum before being disallowed to post new topics',
+	'ERROR_POST_TOPIC_REST'		=> 'You have <strong class="error">%s</strong> free topic and <strong class="error">%s</strong> free post on this forum before being disallowed to post. (Please note that a new topic is considered also as a new post!)',
+	'ERROR_POSTS_TOPIC_REST'	=> 'You have <strong class="error">%s</strong> free topic and <strong class="error">%s</strong> free posts on this forum before being disallowed to post. (Please note that a new topic is considered also as a new post!)',
+	'ERROR_POST_TOPICS_REST'	=> 'You have <strong class="error">%s</strong> free topics and <strong class="error">%s</strong> free post on this forum before being disallowed to post. (Please note that a new topic is considered also as a new post!)',
+	'ERROR_POSTS_TOPICS_REST'	=> 'You have <strong class="error">%s</strong> free topics and <strong class="error">%s</strong> free posts on this forum before being disallowed to post. (Please note that a new topic is considered also as a new post!)',
+	//End MOD: Limit Post as Count]]></action>
+			</edit>
+		</open>
+		<open src="language/en/acp/forums.php">
+			<edit>
+				<find><![CDATA[	'FORUM_LINK_TRACK_EXPLAIN'			=> 'Records the number of times a forum link was clicked.',]]></find>
+				<action type="after-add"><![CDATA[	//Begin MOD: Limit Post as Count
+	'FORUM_MAX_POSTS'					=> 'Maximum count of posts per users',
+	'FORUM_MAX_TOPICS'					=> 'Maximum count of topics per users',
+	'FORUM_MAX_TOPICS_EXPLAIN'			=> 'Should be lower than the maximum post count unless if it is set to 0',
+	'FORUM_MAX_TOPICS_ERROR'			=> 'The maximum of topic per forums should be lower than the maximum of post per forums',
+	'FORUM_MAX_TP_EXPLAIN'				=> 'Set 0 to disable',
+	//Begin MOD: Limit Post as Count]]></action>
+			</edit>
+		</open>
+		<open src="language/en/acp/permissions_phpbb.php">
+			<edit>
+				<find><![CDATA[	'acl_f_noapprove'	=> array('lang' => 'Can post without approval', 'cat' => 'misc'),]]></find>
+				<action type="after-add"><![CDATA[	//MOD BEGIN: Limit Post as Count
+	'acl_f_post_limit'	=> array('lang' => 'Can ignore post count limit', 'cat' => 'misc'),
+	'acl_f_topic_limit'	=> array('lang' => 'Can ignore topic count limit', 'cat' => 'misc'),
+	//MOD End: Limit Post as Count]]></action>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/posting_editor.html">
+			<edit>
+				<find><![CDATA[	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->]]></find>
+				<action type="after-add"><![CDATA[	<!-- IF POST_TOPIC_REST --><p><span class="error">{L_INFORMATION}</span>: {POST_TOPIC_REST}</p><!-- ENDIF -->]]></action>
+			</edit>
+		</open>
+		<php-installer><![CDATA[lpacpf_install.php]]></php-installer>
+	</action-group>
+</mod>

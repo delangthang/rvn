@@ -1,0 +1,337 @@
+<!-- INCLUDE overall_header.html -->
+				
+<a name="maincontent"></a>
+
+<!-- IF ACP_FB_PAGE == 'preferences' -->
+<h1>{L_ACP_FB_PREFS}</h1>
+{L_ACP_FB_PERM_EXPLAIN}
+<form action="{FB_ACTION}" method="post"{S_FORM_ENCTYPE}>
+<fieldset>
+<legend>{L_ACP_FB_ROLE_SET}</legend>
+<dl>
+<dt><label>{L_ACP_FB_ROLE_ENABLE}:</label></dt>
+<dd>
+<input type="radio" class="radio" name="role_enable" value="1"<!-- IF FB_ROLE_ENABLE --> checked="checked"<!-- ENDIF --> /><label>{L_YES}</label>
+<input type="radio" class="radio" name="role_enable" value="0"<!-- IF not FB_ROLE_ENABLE --> checked="checked"<!-- ENDIF --> /><label>{L_NO}</label>
+</dd>
+</dl>
+</fieldset>
+<fieldset>
+<legend>{L_ACP_FB_SCORE}</legend>
+<dl>
+<dt><label>{L_ACP_FB_SCORE_ENABLE}:</label></dt>
+<dd>
+<input type="radio" class="radio" name="score" value="1"<!-- IF FB_SCORE --> checked="checked"<!-- ENDIF --> /><label>{L_YES}</label>
+<input type="radio" class="radio" name="score" value="0"<!-- IF not FB_SCORE --> checked="checked"<!-- ENDIF --> /><label>{L_NO}</label>
+</dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_SCORE_POS}:</label></dt>
+<dd><input name="score_pos" type="text" size="5" maxlength="5" value="{FB_SCORE_POS}" /></dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_SCORE_NEU}:</label></dt>
+<dd><input name="score_neu" type="text" size="5" maxlength="5" value="{FB_SCORE_NEU}" /></dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_SCORE_NEG}:</label></dt>
+<dd><input name="score_neg" type="text" size="5" maxlength="5" value="{FB_SCORE_NEG}" /></dd>
+</dl>
+</fieldset>
+<fieldset>
+<legend>{L_ACP_FB_LINK_SET}</legend>
+<dl>
+<dt><label>{L_ACP_FB_LINK_ENABLE}:</label></dt>
+<dd>
+<input type="radio" class="radio" name="link_enable" value="1"<!-- IF FB_LINK_ENABLE --> checked="checked"<!-- ENDIF --> /><label>{L_YES}</label>
+<input type="radio" class="radio" name="link_enable" value="0"<!-- IF not FB_LINK_ENABLE --> checked="checked"<!-- ENDIF --> /><label>{L_NO}</label>
+</dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_LINK_FORCE}:</label></dt>
+<dd>
+<input type="radio" class="radio" name="link_force" value="1"<!-- IF FB_LINK_FORCE --> checked="checked"<!-- ENDIF --> /><label>{L_YES}</label>
+<input type="radio" class="radio" name="link_force" value="0"<!-- IF not FB_LINK_FORCE --> checked="checked"<!-- ENDIF --> /><label>{L_NO}</label>
+{L_ACP_FB_IGNOREDACP}
+</dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_LINK_FORCE_IN}:</label></dt>
+<dd>
+<input type="radio" class="radio" name="link_force_in" value="1"<!-- IF FB_LINK_FORCE_IN --> checked="checked"<!-- ENDIF --> /><label>{L_YES}</label>
+<input type="radio" class="radio" name="link_force_in" value="0"<!-- IF not FB_LINK_FORCE_IN --> checked="checked"<!-- ENDIF --> /><label>{L_NO}</label>
+{L_ACP_FB_IGNOREDACP}
+</dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_LINK_FORUM}:</label></dt>
+<dd><input name="link_forum" type="text" size="20" maxlength="255" value="{FB_LINK_FORUM}" />&nbsp;&nbsp;{L_ACP_FB_IGNOREDACP}</dd>
+<dd>{L_ACP_FB_LINK_FORUM_D}</dd>
+</dl>
+</fieldset>
+<fieldset>
+<legend>{L_ACP_FB_COMM_SET}</legend>
+<dl>
+<dt><label>{L_ACP_FB_COMM_MINCHARS}:</label></dt>
+<dd><input name="comm_minchars" type="text" size="5" maxlength="5" value="{FB_COMM_MINCHARS}" />
+&nbsp;&nbsp;{L_ACP_FB_IGNOREDACP}</dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_COMM_MAXCHARS}:</label></dt>
+<dd><input name="comm_maxchars" type="text" size="5" maxlength="5" value="{FB_COMM_MAXCHARS}" />
+&nbsp;&nbsp;{L_ACP_FB_IGNOREDACP}</dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_COMM_URL}:</label></dt>
+<dd>
+<input type="radio" class="radio" name="comm_url" value="1"<!-- IF FB_COMM_URL --> checked="checked"<!-- ENDIF --> /><label>{L_YES}</label>
+<input type="radio" class="radio" name="comm_url" value="0"<!-- IF not FB_COMM_URL --> checked="checked"<!-- ENDIF --> /><label>{L_NO}</label>
+</dd>
+</dl>
+</fieldset>
+<fieldset>
+<legend>{L_ACP_FB_ANTIFLOOD}</legend>
+<dl>
+<dt><label>{L_ACP_FB_ANTIFLOOD_DESC}:</label></dt>
+<dd><input name="antiflood" type="text" size="10" maxlength="10" value="{FB_ANTIFLOOD}" /></dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_ANTIFLOOD_SAME}:</label></dt>
+<dd><input name="antiflood_same" type="text" size="10" maxlength="10" value="{FB_ANTIFLOOD_SAME}" /></dd>
+</dl>
+</fieldset>
+<fieldset>
+<legend>{L_ACP_FB_RANKINGS}</legend>
+<dl>
+<dt><label>{L_ACP_FB_TOP_MAIN}:</label></dt>
+<dd><input name="top_main" type="text" size="5" maxlength="255" value="{FB_TOP_MAIN}" /></dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_TOP_BEST}:</label></dt>
+<dd><input name="top_best" type="text" size="5" maxlength="255" value="{FB_TOP_BEST}" /></dd>
+</dl>
+<dl>
+<dt><label>{L_ACP_FB_TOP_WORST}:</label></dt>
+<dd><input name="top_worst" type="text" size="5" maxlength="255" value="{FB_TOP_WORST}" /></dd>
+</dl>
+</fieldset>
+<div>{S_FORM_TOKEN}<input class="button1" name="submit" type="submit" value="{L_SUBMIT}" /></div>
+</form>
+<!-- ENDIF -->
+
+<!-- IF ACP_FB_PAGE == 'search' -->
+<h1>{L_ACP_FB_MANAGE}</h1>
+<form action="{FB_ACTION}" method="post"{S_FORM_ENCTYPE}>
+<fieldset>
+<legend>{L_ACP_FB_SEARCH}</legend>
+<dl>
+<dt><label>{L_USERNAME}:</label></dt>
+<dd><input name="un" type="text" maxlength="255" />
+<input class="button1" name="submit" type="submit" value="{L_SUBMIT}" /></dd>
+</dl>
+</fieldset>
+</form>
+<!-- ENDIF -->
+
+<!-- IF FB_PAGE === 'show' -->
+<h1>{L_ACP_FB_FEEDBACKOF}&nbsp;{FB_TOUSER}</h1>
+<!-- IF FB_SCORE !== false -->
+<table class="tablebg" cellspacing="1">
+<tr><th>{L_ACP_FB_SCORE}</th><th>{L_ACP_FB_PERCENTAGE}</th></tr>
+<tr class="row1" style="line-height:20px; text-align:center;">
+<td style="width:50%;">{FB_SCORE}</td>
+<td style="width:50%;">{FB_PERCENTAGE}%</td>
+</tr>
+</table>
+<!-- ENDIF -->
+<form action="{FB_ACTION}" method="post"{S_FORM_ENCTYPE}>
+<table class="tablebg">
+<tr><th>{L_ACP_FB_POS}</th><th>{L_ACP_FB_NEU}</th><th>{L_ACP_FB_NEG}</th></tr>
+<tr class="row1" style="text-align:center;">
+<td style="width:33%;">{FB_POS}</td>
+<td style="width:34%;">{FB_NEU}</td>
+<td style="width:33%;">{FB_NEG}</td>
+</tr>
+<tr class="row2" style="text-align:center;">
+<td colspan="3"><input class="button2" type="submit" value="{L_ACP_FB_ADD}" /></td>
+</tr>
+</table>
+</form>
+<br />
+
+<div style="float:{S_CONTENT_FLOW_END}; line-height:28px;">
+{L_ACP_FB_FILTER}:&nbsp;
+<a href="{FB_FILTER_ALL}#fb_details">{L_ACP_FB_FILTER_ALL}</a>&nbsp;|&nbsp;
+<a href="{FB_FILTER_POS}#fb_details">{L_ACP_FB_FILTER_POS}</a>&nbsp;|&nbsp;
+<a href="{FB_FILTER_NEU}#fb_details">{L_ACP_FB_FILTER_NEU}</a>&nbsp;|&nbsp;
+<a href="{FB_FILTER_NEG}#fb_details">{L_ACP_FB_FILTER_NEG}</a>
+</div>
+<!-- IF FB_S_ROLE -->
+<div style="float:{S_CONTENT_FLOW_END}; line-height:28px; margin-right:20px;">
+{L_ACP_FB_ROLE}:&nbsp;
+<a href="{FB_ROLE_ALL}#fb_details">{L_ACP_FB_ROLE_ALL}</a>&nbsp;|&nbsp;
+<a href="{FB_ROLE_BUYER}#fb_details">{L_ACP_FB_ROLE_BUYER}</a>&nbsp;|&nbsp;
+<a href="{FB_ROLE_SELLER}#fb_details">{L_ACP_FB_ROLE_SELLER}</a>&nbsp;|&nbsp;
+<a href="{FB_ROLE_TRADE}#fb_details">{L_ACP_FB_ROLE_TRADE}</a>
+</div>
+<!-- ENDIF -->
+<a name="fb_details"></a>
+<h1>{L_ACP_FB_DETAILS}</h1>
+<table class="tablebg">
+<tr>
+<th>{L_ACP_FB_FROM} <a href="{FB_ORDER_FROMA}">[&and;]</a><a href="{FB_ORDER_FROMD}">[&or;]</a></th>
+<th>{L_ACP_FB_IP} <a href="{FB_ORDER_IPA}">[&and;]</a><a href="{FB_ORDER_IPD}">[&or;]</a></th>
+<th>{L_ACP_FB_ONDATE} <a href="{FB_ORDER_DATEA}">[&and;]</a><a href="{FB_ORDER_DATED}">[&or;]</a></th>
+<!-- IF FB_S_ROLE --><th>{L_ACP_FB_ROLE}</th><!-- ENDIF -->
+<th>{L_ACP_FB_FEEDBACK}</th>
+<th>{L_ACP_FB_COMMENT}</th></tr>
+<!-- IF not .feedback -->
+	<tr><td colspan="<!-- IF FB_S_ROLE -->6<!-- ELSE -->5<!-- ENDIF -->">{L_ACP_FB_NOFOUND}</td></tr>
+<!-- ELSE IF -->
+	<!-- BEGIN feedback -->
+		<tr class="<!-- IF feedback.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">
+		<td style="width:200px;">
+		&nbsp;<a href="{feedback.FB_PROFILE}">[{L_READ_PROFILE}]</a>
+		<!-- IF FB_S_LINK && feedback.FB_LINK -->
+		<a href="{feedback.FB_LINK}">[{L_TOPIC}]</a>
+		<!-- ENDIF -->
+		&nbsp;<a href="{feedback.FB_URL}" style="color:{feedback.FB_USER_COL};">{feedback.FB_USER}</a>
+		</td>
+		<td>{feedback.FB_IP}</td>
+		<td style="width:80px; text-align:center;">{feedback.FB_DATE}</td>
+		<!-- IF FB_S_ROLE -->
+			<td style="width:80px; text-align:center;">{feedback.FB_ROLE}</td>
+		<!-- ENDIF -->
+		<td style="width:80px; text-align:center;">{feedback.FB_VOTE}</td>
+		<td>
+		<!-- IF feedback.FB_EDIT -->
+		<div style="float:{S_CONTENT_FLOW_END};">
+		<a href="{feedback.FB_EDITURL}">{ICON_EDIT}</a>
+		<a href="{feedback.FB_DELETEURL}">{ICON_DELETE}</a>
+		</div>
+		<!-- ENDIF -->
+		{feedback.FB_COMMENT}
+		</td>
+		</tr>
+	<!-- END -->
+<!-- ENDIF -->
+</table>
+<!-- ENDIF -->
+
+<!-- IF FB_PAGE === 'add' -->
+<h1>{L_ACP_FB_ADD}</h1>
+<form action="{FB_ACTION}" method="post"{S_FORM_ENCTYPE}>
+<table class="tablebg">
+<tr class="row1">
+<td style="width:200px;">{L_ACP_FB_FROM}</td>
+<td><input name="from" type="text" maxlength="255" /></td>
+</tr>
+<tr class="row1">
+<td style="width:200px;">{L_USERNAME}</td>
+<td>{FB_TOUSER}</td>
+</tr>
+<!-- IF FB_S_ROLE -->
+<tr class="row1">
+<td>{L_ACP_FB_ROLE}</td>
+<td>
+<input type="radio" class="radio" name="role" value="1" />
+<span class="genmed">{L_ACP_FB_BUYER}</span>
+<input type="radio" class="radio" name="role" value="2" />
+<span class="genmed">{L_ACP_FB_SELLER}</span>
+<input type="radio" class="radio" name="role" value="0" checked="checked" />
+<span class="genmed">{L_ACP_FB_TRADE}</span>
+</td>
+</tr>
+<!-- ENDIF -->
+<tr class="row1">
+<td>{L_ACP_FB_FEEDBACK}</td>
+<td>
+<input type="radio" class="radio" name="vote" value="0" />
+<span class="genmed" style="color:red;">{L_ACP_FB_NEG}</span>
+<input type="radio" class="radio" name="vote" value="2" checked="checked" />
+<span class="genmed" style="color:black;">{L_ACP_FB_NEU}</span>
+<input type="radio" class="radio" name="vote" value="1" />
+<span class="genmed" style="color:green;">{L_ACP_FB_POS}</span>
+</td>
+</tr>
+<!-- IF FB_S_LINK -->
+<tr class="row1">
+<td style="width:100px;"><!-- IF FB_S_LINK_FORCE -->{L_ACP_FB_LINK}<!-- ELSE -->{L_ACP_FB_LINKOPT}<!-- ENDIF --></td>
+<td><input name="link" type="text" maxlength="8" value="{FB_LINK}" /></td>
+</tr>
+<!-- ENDIF -->
+<tr class="row1">
+<td>{L_ACP_FB_COMMENTOPT}</td>
+<td><textarea name="comment" rows="7" cols="50"></textarea></td>
+</tr>
+<tr class="row2">
+<td></td>
+<td>
+{FB_HIDDEN}{S_FORM_TOKEN}<input class="btnlite" name="submit" type="submit" value="{L_ACP_FB_ADD}" />
+</td>
+</tr>
+</table>
+</form>
+<!-- ENDIF -->
+
+<!-- IF FB_PAGE === 'edit' -->
+<h1>{L_ACP_FB_EDIT}</h1>
+<form action="{FB_ACTION}" method="post"{S_FORM_ENCTYPE}>
+<table class="tablebg">
+<tr class="row1">
+<td style="width:200px;">{L_ACP_FB_FROM} ID</td>
+<td>{FB_FROM}</td>
+</tr>
+<tr class="row1">
+<td style="width:200px;">{L_USERNAME}</td>
+<td>{FB_TOUSER}</td>
+</tr>
+<!-- IF FB_S_ROLE -->
+<tr class="row1">
+<td>{L_ACP_FB_ROLE}</td>
+<td>
+<input type="radio" class="radio" name="role" value="1"<!-- IF FB_ROLE == 1 --> checked="checked"<!-- ENDIF --> />
+<span class="genmed">{L_ACP_FB_BUYER}</span>
+<input type="radio" class="radio" name="role" value="2"<!-- IF FB_ROLE == 2 --> checked="checked"<!-- ENDIF --> />
+<span class="genmed">{L_ACP_FB_SELLER}</span>
+<input type="radio" class="radio" name="role" value="0"<!-- IF FB_ROLE == 0 --> checked="checked"<!-- ENDIF --> />
+<span class="genmed">{L_ACP_FB_TRADE}</span>
+</td>
+</tr>
+<!-- ELSE -->
+<input type="hidden" name="role" value="{FB_ROLE}" />
+<!-- ENDIF -->
+<tr class="row1">
+<td>{L_ACP_FB_FEEDBACK}</td>
+<td>
+<input type="radio" class="radio" name="vote" value="0"<!-- IF FB_VOTE == 0 --> checked="checked"<!-- ENDIF --> />
+<span class="genmed" style="color:red;">{L_ACP_FB_NEG}</span>
+<input type="radio" class="radio" name="vote" value="2"<!-- IF FB_VOTE == 2 --> checked="checked"<!-- ENDIF --> />
+<span class="genmed" style="color:black;">{L_ACP_FB_NEU}</span>
+<input type="radio" class="radio" name="vote" value="1"<!-- IF FB_VOTE == 1 --> checked="checked"<!-- ENDIF --> />
+<span class="genmed" style="color:green;">{L_ACP_FB_POS}</span>
+</td>
+</tr>
+<!-- IF FB_S_LINK -->
+<tr class="row1">
+<td style="width:100px;"><!-- IF FB_S_LINK_FORCE -->{L_ACP_FB_LINK}<!-- ELSE -->{L_ACP_FB_LINKOPT}<!-- ENDIF --></td>
+<td><input name="link" type="text" maxlength="8" value="{FB_LINK}" /></td>
+</tr>
+<!-- ENDIF -->
+<tr class="row1">
+<td>{L_ACP_FB_COMMENTOPT}</td>
+<td><textarea name="comment" rows="7" cols="50">{FB_COMM}</textarea></td>
+</tr>
+<tr class="row2">
+<td></td>
+<td>
+{FB_HIDDEN}{S_FORM_TOKEN}<input class="btnlite" name="submit" type="submit" value="{L_ACP_FB_EDIT}" />
+</td>
+</tr>
+</table>
+</form>
+<!-- ENDIF -->
+
+<div class="small" style="text-align:right;">ShMk User Feedback &copy; 2009 <a href="http://www.shockmaker.com">ShockMaker</a></div>
+				
+<!-- INCLUDE overall_footer.html -->

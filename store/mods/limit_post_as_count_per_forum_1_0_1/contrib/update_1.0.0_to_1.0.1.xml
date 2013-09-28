@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
+<!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
+	<header>
+		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
+		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
+		<title lang="en"><![CDATA[Limit Post as Count per Forum (Update from 1.0.0)]]></title>
+		<title lang="fr"><![CDATA[Limite du nombre de message par forum (Mise à jour depuis 1.0.0)]]></title>
+		<description lang="en"><![CDATA[This mod will allow you to limit the count of messages and/or topics of an user per forum.
+This can be useful if you wish to create a permission that would force the member to get VIP access to post more post/topic in the forum
+Of course these restrictions can be ignored via forum permissions]]></description>
+		<description lang="fr"><![CDATA[Ce mod vous permettras de limiter le nombre de message et/ou de sujets d'un utilisateur par forum.
+Cela peux-être utile si vous désirer créer une permission qui pousserais les membre à obtenir un accès VIP pour poster plus de message dans le forum
+La limitation peux bien sûr être ignoré via des permissions de forum.]]></description>
+		<author-group>
+			<author>
+				<realname><![CDATA[Georges.L]]></realname>
+				<username><![CDATA[Geolim4]]></username>
+				<homepage><![CDATA[http://geolim4.com]]></homepage>
+			</author>
+		</author-group>
+		<mod-version>1.0.1</mod-version>
+		<installation>
+			<level>easy</level>
+			<time>300</time>
+			<target-version>3.0.11</target-version>
+		</installation>
+		<link-group>
+			<link type="contrib" href="fr.xml" lang="en">French Translation</link>
+			<link type="contrib" href="fr.xml" lang="fr">Traduction Française</link>
+		</link-group>
+	</header>
+	<action-group>
+		<copy>
+			<file from="root/umil/*.*" to="umil/*.*"/>
+			<file from="root/lpacpf_install.php" to="lpacpf_install.php"/>
+		</copy>
+		<open src="posting.php">
+			<edit>
+				<find><![CDATA[//MOD BEGIN: Limit Post as Count
+if ( in_array($mode, array('post', 'reply', 'quote')) )
+{
+	$is_topic_unauthed = ( !$auth->acl_get('f_topic_limit', $forum_id) && $post_data['forum_topic_limit'] && $mode == 'post' ) ? true : false;
+	$is_post_unauthed = ( !$auth->acl_get('f_post_limit', $forum_id) && $post_data['forum_post_limit'] ) ? true : false;
+	$post_topic_rest = '';
+	$post_rest = $topic_rest = 0;
+	if ( $is_post_unauthed || $is_topic_unauthed )
+	{
+		//Run setup...
+		$user->setup('posting');
+
+		$sql = 'SELECT' . ( $is_topic_unauthed ? ' COUNT(' . ( ($is_topic_unauthed && $is_post_unauthed) ? 'DISTINCT t.' : '' ) . 'topic_id) AS topics_count' : '' ) . ( ($is_topic_unauthed && $is_post_unauthed) ? ', ' : '' ) . ( $is_post_unauthed ? ' COUNT(' . ( ($is_topic_unauthed && $is_post_unauthed) ? 'DISTINCT p.' : '' ) . 'post_id) AS posts_count' : '' ) . '
+			FROM ' . ( $is_topic_unauthed ? TOPICS_TABLE : '' ) . ( ($is_topic_unauthed && $is_post_unauthed) ? ' t, ' : '' ) . ( $is_post_unauthed ? POSTS_TABLE : '' ) . ( ($is_topic_unauthed && $is_post_unauthed) ? ' p' : '' ) . '
+			WHERE ' . ( $is_topic_unauthed ? 'topic_poster = ' . (int) $user->data['user_id'] : '' )  . ( ($is_topic_unauthed && $is_post_unauthed) ? ' AND ' : '' ) . ( $is_post_unauthed ? ' poster_id = ' . (int) $user->data['user_id'] : '' ) . '
+			AND ' . ( ($is_topic_unauthed && $is_post_unauthed) ? 't.forum_id = ' . (int) $forum_id . ' AND p.forum_id = ' . (int) $forum_id : 'forum_id = ' . (int) $forum_id );
+		$result = $db->sql_query_limit($sql, 1);
+		$data_count = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+		
+		if ( $post_data['forum_topic_limit'] && isset($data_count['topics_count']) && $data_count['topics_count'] >= $post_data['forum_topic_limit'] )
+		{
+			trigger_error($user->lang('ERROR_TOPIC' . ( ($post_data['forum_topic_limit'] > 1) ? 'S' : '' ) . '_COUNT', $post_data['forum_topic_limit']), E_USER_WARNING);
+		}
+
+		if ( $post_data['forum_post_limit'] && isset($data_count['posts_count']) && $data_count['posts_count'] >= $post_data['forum_post_limit'] )
+		{
+			trigger_error($user->lang('ERROR_POST' . ( ( $post_data['forum_post_limit'] > 1) ? 'S' : '' ) . '_COUNT', $post_data['forum_post_limit']), E_USER_WARNING);
+		}
+
+		if ( $is_post_unauthed && $is_topic_unauthed && $mode == 'post')
+		{
+			$post_rest = ($post_data['forum_post_limit'] - $data_count['posts_count']);
+			$topic_rest = ($post_data['forum_topic_limit'] - $data_count['topics_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_POST' . ( ( $post_rest > 1 ) ? 'S' : '' ) . '_TOPIC' . ( ( $topic_rest > 1 ) ? 'S' : '' ) . '_REST', $topic_rest, $post_rest));
+		}
+		else if( !$is_post_unauthed && $is_topic_unauthed && $mode == 'post')
+		{
+			$topic_rest = ($post_data['forum_topic_limit'] - $data_count['topics_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_TOPIC' . ( ( $topic_rest > 1 ) ? 'S' : '' ) . '_REST', $topic_rest));
+		}
+		else if( $is_post_unauthed && !$is_topic_unauthed )
+		{
+			$post_rest = ($post_data['forum_post_limit'] - $data_count['posts_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_POST' . ( ( $post_rest > 1 ) ? 'S' : '' ) . '_REST', $post_rest));
+		}
+	}
+}
+//MOD END: Limit Post as Count]]></find>
+				<action type="replace-with"><![CDATA[//MOD BEGIN: Limit Post as Count
+if ( in_array($mode, array('post', 'reply', 'quote')) )
+{
+	$is_topic_unauthed = (!$auth->acl_get('f_topic_limit', $forum_id) && $post_data['forum_topic_limit'] && $mode == 'post') ? true : false;
+	$is_post_unauthed = (!$auth->acl_get('f_post_limit', $forum_id) && $post_data['forum_post_limit']) ? true : false;
+	$post_topic_rest = '';
+	$post_rest = $topic_rest = 0;
+	if ( $is_post_unauthed || $is_topic_unauthed )
+	{
+		//Run setup...
+		$user->setup('posting');
+
+		$sql = 'SELECT';
+		if ( $is_topic_unauthed )
+		{
+			$sql .= ' COUNT(' . ( ($is_topic_unauthed && $is_post_unauthed) ? 'DISTINCT t.' : '' ) . 'topic_id) AS topics_count';
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ', ';
+		}
+		if ( $is_post_unauthed )
+		{
+			$sql .= ' COUNT(';
+			if ( $is_topic_unauthed && $is_post_unauthed )
+			{
+				$sql .= 'DISTINCT p.';
+			}
+			$sql .= 'post_id) AS posts_count';
+		}
+		$sql .= ' FROM ';
+		if ( $is_topic_unauthed )
+		{
+			$sql .= TOPICS_TABLE;
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ' t, ';
+		}
+		if ( $is_post_unauthed )
+		{
+			$sql .= POSTS_TABLE;
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ' p';
+		}
+		$sql .= ' WHERE ';
+		if ( $is_topic_unauthed )
+		{
+			$sql .= 'topic_poster = ' . (int) $user->data['user_id'];
+		}
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= ' AND ';
+		}
+		if ( $is_post_unauthed )
+		{
+			$sql .= ' poster_id = ' . (int) $user->data['user_id'];
+		}
+		$sql .= ' AND ';
+		if ( $is_topic_unauthed && $is_post_unauthed )
+		{
+			$sql .= 't.forum_id = ' . (int) $forum_id . ' AND p.forum_id = ' . (int) $forum_id;
+		}
+		else
+		{
+			$sql .= 'forum_id = ' . (int) $forum_id;
+		}
+		$result = $db->sql_query_limit($sql, 1);
+		$data_count = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+		
+		if ( $post_data['forum_topic_limit'] && isset($data_count['topics_count']) && $data_count['topics_count'] >= $post_data['forum_topic_limit'] )
+		{
+			trigger_error($user->lang('ERROR_TOPIC' . ( ($post_data['forum_topic_limit'] > 1) ? 'S' : '' ) . '_COUNT', $post_data['forum_topic_limit']), E_USER_WARNING);
+		}
+
+		if ( $post_data['forum_post_limit'] && isset($data_count['posts_count']) && $data_count['posts_count'] >= $post_data['forum_post_limit'] )
+		{
+			trigger_error($user->lang('ERROR_POST' . ( ( $post_data['forum_post_limit'] > 1) ? 'S' : '' ) . '_COUNT', $post_data['forum_post_limit']), E_USER_WARNING);
+		}
+
+		if ( $is_post_unauthed && $is_topic_unauthed && $mode == 'post')
+		{
+			$post_rest = ($post_data['forum_post_limit'] - $data_count['posts_count']);
+			$topic_rest = ($post_data['forum_topic_limit'] - $data_count['topics_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_POST' . ( ( $post_rest > 1 ) ? 'S' : '' ) . '_TOPIC' . ( ( $topic_rest > 1 ) ? 'S' : '' ) . '_REST', $topic_rest, $post_rest));
+		}
+		else if( !$is_post_unauthed && $is_topic_unauthed && $mode == 'post')
+		{
+			$topic_rest = ($post_data['forum_topic_limit'] - $data_count['topics_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_TOPIC' . ( ( $topic_rest > 1 ) ? 'S' : '' ) . '_REST', $topic_rest));
+		}
+		else if( $is_post_unauthed && !$is_topic_unauthed )
+		{
+			$post_rest = ($post_data['forum_post_limit'] - $data_count['posts_count']);
+			$template->assign_var('POST_TOPIC_REST', $user->lang('ERROR_POST' . ( ( $post_rest > 1 ) ? 'S' : '' ) . '_REST', $post_rest));
+		}
+	}
+}
+//MOD END: Limit Post as Count]]></action>
+			</edit>
+		</open>
+	</action-group>
+</mod>

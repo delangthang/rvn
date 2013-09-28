@@ -1,0 +1,879 @@
+/*
+	Page specific code
+*/
+
+/*
+	Header boxes
+*/
+.phpbb .topiclist .header, .phpbb h2.header-outer {
+	clear: both;
+	display: block;
+	margin: 6px 0 0;
+	padding: 0;
+	background: transparent none 0 0 repeat-x;
+	border-radius: 0;
+	border-width: 0;
+	height: 32px;
+	overflow: hidden;
+}
+.phpbb .topiclist .header {
+	background: none 50% 0 no-repeat, transparent none 0 0 no-repeat;
+	position: relative;
+}
+.oldie .phpbb .topiclist .header {
+	background: transparent none 0 0 no-repeat;
+}
+.phpbb h2.header.header-outer {
+	background-position: 50% 0;
+	background-repeat: no-repeat;
+}
+.phpbb .topiclist .header {
+	background-repeat: no-repeat;
+}
+.phpbb .topiclist .header dl, .phpbb h2.header-outer .header-right, .phpbb h2.header-outer .header-left {
+	display: block;
+	background: transparent none 100% 0 no-repeat;
+	padding: 0;
+}
+.phpbb h2.header-outer .header-left {
+	background-position: 0 0;
+}
+
+.phpbb .topiclist .header dd {
+	display: none !important;
+}
+.phpbb .topiclist .header dt, .phpbb h2.header-outer .header-inner {
+	clear: both;
+	display: block;
+	font-size: 15px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	line-height: 1em;
+	white-space: nowrap;
+	text-align: center;
+	height: 26px !important;
+	margin: 0 10px;
+	padding: 6px 20px 0 !important;
+	overflow: hidden;
+	background: transparent none 0 0 repeat-x;
+}
+
+.phpbb .topiclist .header a, .phpbb h2.header-outer a, .phpbb .post h3 a {
+	text-decoration: none;
+}
+.phpbb .topiclist .header a:hover, .phpbb h2.header-outer a:hover, .phpbb .post h3 a:hover {
+	text-decoration: underline;
+}
+
+.ie7 .phpbb .topiclist .header dt, .ie7 .phpbb h2.header-outer .header-inner {
+	font-family: Arial;
+}
+
+.phpbb .expandable .header:after {
+	display: block;
+	position: absolute;
+	content: '';
+	top: 0;
+	bottom: 4px;
+	right: 8px;
+	z-index: 2;
+	width: 13px;
+	background: transparent none 0 50% no-repeat;
+	opacity: 0.5;
+}
+.phpbb .expandable .header:hover:after {
+	opacity: 1;
+}
+.phpbb .expandable .header.inactive:after {
+	background-position: -15px 50%;
+	opacity: 1;
+}
+
+/*
+	Forums list
+*/
+.phpbb .topiclist {
+	clear: both;
+	zoom: 1;
+}
+
+.phpbb .topiclist {
+	display: block;
+}
+.phpbb .topiclist:after, .phpbb .post:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.phpbb .topiclist > li {
+	margin: 2px 0;
+	padding: 4px 0;
+	border: 1px solid transparent;
+	border-radius: 6px;
+}
+.phpbb .topiclist > li.row-outer {
+	padding: 0;
+}
+
+.phpbb .topiclist dl {
+	display: table;
+	width: 100%;
+}
+.phpbb .topiclist dt, .phpbb .topiclist dd {
+	display: table-cell;
+	vertical-align: middle;
+	line-height: 1.5em;
+	height: 33px;
+	padding: 0 6px;
+}
+.phpbb .topiclist .icon dt {
+	padding-left: 40px;
+	height: 39px;
+}
+
+.phpbb .topiclist dd {
+	border-left: 1px solid transparent;
+	text-align: center;
+	line-height: 1.3em;
+	width: 50px;
+}
+
+.phpbb .topiclist dd.info, .phpbb .topiclist dd.time {
+	min-width: 220px;
+	font-size: 11px;
+	line-height: 1.5em;
+}
+.phpbb .topiclist dd.lastpost, .phpbb .topiclist dd.redirect {
+	min-width: 220px;
+	text-align: left;
+	font-size: 11px;
+	line-height: 1.5em;
+}
+.phpbb .topiclist dd.moderation {
+	width: 40%;
+	text-align: left;
+}
+.phpbb .topiclist dd.empty {
+	display: none;
+}
+
+.phpbb .topiclist .topics dfn, .phpbb .topiclist .posts dfn, .phpbb .topiclist .views dfn {
+	text-transform: lowercase;
+	display: block;
+	font-size: 11px;
+}
+.phpbb span.forum-image {
+	float: left;
+	padding-right: 6px;
+}
+.phpbb dl.icon {
+	background: transparent none 3px 50% no-repeat;
+}
+.phpbb dl.icon dt {
+	background: transparent none 3px 50% no-repeat;
+}
+
+.phpbb a.forumtitle, .phpbb a.topictitle {
+	display: inline-block;
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: normal;
+	text-decoration: none;
+	line-height: 1em;
+}
+.phpbb a.topictitle {
+	padding-top: 1px;
+}
+.phpbb a.forumtitle:hover, .phpbb a.topictitle:hover {
+	text-decoration: underline;
+}
+
+.phpbb p.subforums, .phpbb p.moderators {
+	padding: 2px 0 0;
+}
+.phpbb p.subforums strong, .phpbb p.moderators strong {
+	font-weight: normal;
+}
+
+/*
+	IE7 topics list
+*/
+.ie7 .phpbb .topiclist dl {
+	display: block;
+	height: 1%;
+}
+.ie7 .phpbb .topiclist dl.icon {
+	min-height: 39px;
+}
+.ie7 .phpbb .topiclist dt, .ie7 .phpbb .topiclist dd {
+	display: block;
+	float: left;
+}
+.ie7 .phpbb .topiclist dt {
+	width: 50%;
+	height: 1%;
+}
+.ie7 .phpbb .topiclist .header dt {
+	width: auto;
+	float: none;
+}
+.ie7 .phpbb .topiclist dd {
+	width: 8%;
+}
+.ie7 .phpbb .topiclist dd.lastpost {
+	width: 25%;
+}	 
+
+.ie7 .phpbb .topiclist .header dl.icon, .ie7 .phpbb .topiclist .header dt {
+	min-height: 32px;
+	max-height: 32px;
+	height: 32px !important;
+	padding-top: 0;
+	zoom: 1;
+}
+
+
+/*
+	Small arrows
+*/
+.phpbb a.subforum {
+	padding-left: 14px;
+	background: transparent none 0 50% no-repeat;
+}
+
+/*
+	Content blocks
+*/
+.phpbb h2, .phpbb h3 {
+	margin: 12px 0 4px;
+	font-size: 16px;
+	font-family: Helvetica, Arial;
+	font-weight: 400;
+	line-height: 1.2em;
+}
+
+.ie7 .phpbb .panel, .ue7 .phpbb div.rules {
+	clear: both;
+}
+.phpbb .panel, .phpbb div.rules, .phpbb .cp-mini {
+	margin: 6px 0;
+	padding: 0;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	background: transparent none 0 0 repeat-x;
+}
+.phpbb .pm-panel-message {
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+}
+.phpbb .panel .inner, .phpbb .panel .content {
+	padding: 4px;
+}
+.phpbb .panel-outer .panel-inner {
+	padding: 0;
+}
+.phpbb div.rules .inner {
+	padding: 10px;
+	line-height: 1.5em;
+}
+.phpbb #information.rules .inner {
+	text-align: center;
+	padding: 20px;
+}
+.phpbb .postbody p.rules {
+	padding: 10px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.phpbb .panel-wrapper, .phpbb .panel-wrapper > .panel-inner {
+	border-width: 0 !important;
+	box-shadow: none !important;
+}
+.phpbb .panel-wrapper .inner-first {
+	padding: 4px 0;
+}
+
+.phpbb .panel h2, .phpbb .panel h3 {
+	margin: 0;
+	padding: 6px 0 0;
+}
+.phpbb .panel h2:first-child, .phpbb .panel h3:first-child,
+.phpbb .panel .corners-top + h2, .phpbb .panel .corners-top + h3 {
+	padding-top: 0;
+}
+.phpbb .panel p {
+	padding: 3px 0;
+}
+.phpbb .panel.stats .inner {
+	background: transparent none 5px 50% no-repeat;
+	padding-left: 40px;
+}
+.phpbb div.rules span+strong {
+	font-family: Helvetica, Arial;
+	font-size: 16px;
+	display: inline-block;
+	padding-bottom: 4px;
+}
+.phpbb .rules {
+	background-position: 50% 0;
+	background-repeat: no-repeat;
+}
+.phpbb .postbody .rules strong {
+	font-weight: normal;
+}
+
+.phpbb #message.panel .panel-inner, .phpbb #confirm .panel .panel-inner {
+	padding: 10px;
+	line-height: 1.5em;
+	font-size: 13px;
+}
+
+.phpbb h2.header + div.rules, .phpbb h2.header + .navbar, .phpbb h2.header + .topic-actions {
+	margin-top: 4px;
+}
+
+
+/*
+	Tables
+*/
+.phpbb table.table1 {
+	margin: 6px 0;
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 2px;
+}
+.phpbb table.table1 td, .phpbb table.table1 th {
+	border: 1px solid transparent;
+	border-radius: 5px;
+	padding: 4px;
+	vertical-align: middle;
+}
+.phpbb table.table1 th {
+	background: transparent none 0 0 repeat-x;
+}
+.phpbb td.posts, .phpbb td.info {
+	text-align: center;
+}
+
+/*
+	Arrows
+*/
+.phpbb a.left, .phpbb a.right, .phpbb a.up, .phpbb a.down {
+	background: none transparent 0 50% no-repeat;
+	padding-left: 10px;
+	text-decoration: none;
+	line-height: 1em;
+	font-size: 12px;
+	font-family: Arial;
+	transition: background-position 0.25s ease;
+	-moz-transition: background-position 0.25s ease;
+	-webkit-transition: background-position 0.25s ease;
+	-o-transition: background-position 0.25s ease;
+	-ms-transition: background-position 0.25s ease;
+}
+.phpbb a.left:hover, .phpbb a.up:hover, .phpbb a.down:hover {
+	background-position: 2px 50%;
+}
+.phpbb a.right, .phpbb a.right-box.up, .phpbb a.right-box.down {
+	background-position: 100% 50%;
+	padding-left: 0;
+	padding-right: 10px;
+}
+.phpbb a.right:hover, .phpbb a.right-box.up:hover, .phpbb a.right-box.down:hover {
+	background-position: calc(100% - 2px) 50%;
+	background-position: -moz-calc(100% - 2px) 50%;
+}
+.phpbb .submit-buttons a.up {
+	margin-top: 6px;
+}
+
+
+/*
+	Pagination, topic actions, reported/unapproved posts
+*/
+.phpbb .display-options {
+	text-align: center;
+	clear: both;
+}
+.phpbb .display-options a {
+	margin-top: 6px;
+}
+.phpbb .pagination {
+	margin: 0;
+	padding: 0;
+	line-height: 1em;
+}
+.ie7 .phpbb .topic-actions {
+	min-height: 28px;
+}
+.phpbb .topic-actions .pagination {
+	float: right;
+	padding-left: 6px;
+	padding-top: 4px;
+}
+.phpbb .row .pagination {
+	float: right;
+}
+.phpbb .pagination span.page-sep, .phpbb .pagination span.page-dots { display: none; }
+.phpbb .pagination span a, .phpbb .pagination span strong {
+	display: inline-block;
+	margin: 0 1px;
+	text-align: center;
+	min-width: 10px;
+	padding: 2px 3px 3px;
+	border-radius: 5px;
+	text-decoration: none;
+	font-weight: normal;
+	background-position: 0 50%;
+	background-repeat: repeat-x;
+}
+.phpbb .pagination span strong { pointer-events: none; }
+
+.phpbb a.unapproved, .phpbb a.reported {
+	float: right;
+	display: block;
+	margin-top: -2px;
+	padding-left: 6px;
+	opacity: 0.8;
+}
+.phpbb a.unapproved img, .phpbb a.reported img {
+	display: block;
+}
+.phpbb a.unapproved:hover, .phpbb a.reported:hover {
+	opacity: 1;
+}
+.phpbb div.buttons {
+	float: left;
+}
+.phpbb .inner > div.buttons {
+	float: none;
+}
+.phpbb div.buttons > div {
+	margin-right: 5px;
+	float: left;
+}
+.phpbb .topic-actions .search-box {
+	float: left;
+	padding-top: 3px;
+}
+
+.phpbb #jumpbox, .phpbb .jumpbox, .phpbb #jumpbox + form, .phpbb .js-jumpbox {
+	display: block;
+	float: right;
+	text-align: right;
+	clear: right;
+	margin: 4px 0;
+}
+.phpbb .jumpbox-js label {
+	float: left;
+	display: block;
+	padding-top: 11px;
+	padding-right: 4px;
+}
+
+/*
+	Posting form
+*/
+.phpbb #format-buttons {
+	padding: 2px 0;
+}
+.phpbb #smiley-box {
+	float: right;
+	width: 200px;
+}
+.phpbb #message-box {
+	margin-right: 210px;
+}
+.phpbb #qr_editor_div #message-box {
+	margin-right: 0;
+}
+.phpbb #message-box textarea {
+	width: 98%;
+	width: calc(100% - 6px);
+	width: -moz-calc(100% - 6px);
+}
+
+.phpbb p.error, .phpbb dd.error {
+	padding: 6px;
+}
+
+/*
+	Poll
+*/
+.phpbb .polls {
+	margin: 4px 0 0;
+}
+.phpbb .polls dl {
+	display: table;
+	width: 100%;
+	border-top: 1px solid transparent;
+}
+.phpbb .polls dl.votes {
+	border-top-width: 0;
+}
+.phpbb .polls dt, .phpbb .polls dd {
+	display: table-cell;
+	margin: 0;
+	padding: 4px 0 4px 4px;
+}
+.phpbb .polls dt {
+	width: 95%;
+	clear: left;
+	padding-left: 0;
+}
+.phpbb .polls dd {
+	width: 20%;
+}
+.phpbb .polls dd.resultbar {
+	width: 50%;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.ie7 .phpbb .polls dl, .ie7 .phpbb .polls dt, .ie7 .phpbb .polls dd {
+	display: block;
+}
+.ie7 .phpbb .polls dt, .ie7 .phpbb .polls dd {
+	float: left;
+}
+.ie7 .phpbb .polls dt {
+	width: 30%;
+}
+.ie7 .phpbb .polls dd {
+	width: 10%;
+}
+.ie7 .phpbb .polls dd.resultbar {
+	width: 45%;
+}
+
+.phpbb .polls dd.resultbar > div {
+	min-width: 10px;
+	padding: 3px 4px 2px;
+	border: 0px solid transparent;
+	border-radius: 6px;
+	text-align: right;
+	line-height: 1em;
+	font-size: 12px;
+	font-family: Arial;
+	background: transparent none 0 50% repeat-x;
+}
+
+.phpbb .polls dl.votes dt { 
+	display: none; 
+}
+.phpbb .polls dl.votes dd { 
+	text-align: center;
+	width: 100%;
+	padding-top: 0;
+}
+.phpbb .content p.author {
+	color: #808080;
+}
+
+
+/*
+	Posts
+*/
+.phpbb .post+hr.divider {
+	display: none;
+}
+
+.phpbb p.author {
+	font-size: 12px;
+	line-height: 1.5em;
+	padding: 0;
+}
+
+.phpbb .post {
+	margin: 6px 0;
+	clear: both;
+	position: relative;
+}
+.phpbb .post-content-wrap {
+	display: table;
+	width: 100%;
+	max-width: 100%;
+}
+.phpbb .post-content-wrap > span {
+	display: none;
+}
+.phpbb .post-content-wrap > .postbody {
+	display: table-cell;
+	vertical-align: top;
+	width: 100%;
+	padding-bottom: 10px;
+}
+.phpbb .profile + .postbody {
+	border-left: 1px solid transparent;
+	padding-left: 10px;
+	padding-right: 6px;
+}
+.phpbb .post {
+	border: 1px solid transparent;
+	border-radius: 6px;
+	padding: 0;
+	word-wrap: break-word;
+}
+.phpbb .post-content-wrap > .postprofile, .phpbb .post-content-wrap > .profile {
+	display: table-cell;
+	vertical-align: top;
+	min-width: 190px;
+	vertical-align: top;
+	padding-bottom: 10px;
+}
+.phpbb .post .postprofile {
+	padding: 0 4px 4px 0;
+	word-wrap: break-word;
+}
+
+.ie7 .phpbb .post-content-wrap {
+	display: block;
+}
+.ie7 .phpbb .post-content-wrap > .profile {
+	display: block;
+	float: left;
+	width: 190px;
+}
+.ie7 .phpbb .post-content-wrap > .postbody {
+	display: block;
+	margin-left: 200px;
+	clear: none;
+	width: auto;
+}
+.ie7 .phpbb #topicreview .post .postbody, .ie7 .phpbb #prev: right;
+	padding-left: 6px;
+	padding-top: 4px;
+}
+.phpbb .row .pagination {
+	float: right;
+}
+.phpbb .pagination span.page-sep, .phpbb .pagination span.page-dots { display: none; }
+.phpbb .pagination span a, .phpbb .pagination span strong {
+	display: inline-block;
+	margin: 0 1px;
+	text-align: center;
+	min-width: 10px;
+	padding: 2px 3px 3px;
+	border-radius: 5px;
+	text-decoration: none;
+	font-weight: normal;
+	background-position: 0 50%;
+	background-repeat: repeat-x;
+}
+.phpbb .pagination span strong { pointer-events: none; }
+
+.phpbb a.unapproved, .phpbb a.reported {
+	float: right;
+	display: block;
+	margin-top: -2px;
+	padding-left: 6px;
+	opacity: 0.8;
+}
+.phpbb a.unapproved img, .phpbb a.reported img {
+	display: block;
+}
+.phpbb a.unapproved:hover, .phpbb a.reported:hover {
+	opacity: 1;
+}
+.phpbb div.buttons {
+	float: left;
+}
+.phpbb .inner > div.buttons {
+	float: none;
+}
+.phpbb div.buttons > div {
+	margin-right: 5px;
+	float: left;
+}
+.phpbb .topic-actions .search-box {
+	float: left;
+	padding-top: 3px;
+}
+
+.phpbb #jumpbox, .phpbb .jumpbox, .phpbb #jumpbox + form, .phpbb .js-jumpbox {
+	display: block;
+	float: right;
+	text-align: right;
+	clear: right;
+	margin: 4px 0;
+}
+.phpbb .jumpbox-js label {
+	float: left;
+	display: block;
+	padding-top: 11px;
+	padding-right: 4px;
+}
+
+/*
+	Posting form
+*/
+.phpbb #format-buttons {
+	padding: 2px 0;
+}
+.phpbb #smiley-box {
+	float: right;
+	width: 200px;
+}
+.phpbb #message-box {
+	margin-right: 210px;
+}
+.phpbb #qr_editor_div #message-box {
+	margin-right: 0;
+}
+.phpbb #message-box textarea {
+	width: 98%;
+	width: calc(100% - 6px);
+	width: -moz-calc(100% - 6px);
+}
+
+.phpbb p.error, .phpbb dd.error {
+	padding: 6px;
+}
+
+/*
+	Poll
+*/
+.phpbb .polls {
+	margin: 4px 0 0;
+}
+.phpbb .polls dl {
+	display: table;
+	width: 100%;
+	border-top: 1px solid transparent;
+}
+.phpbb .polls dl.votes {
+	border-top-width: 0;
+}
+.phpbb .polls dt, .phpbb .polls dd {
+	display: table-cell;
+	margin: 0;
+	padding: 4px 0 4px 4px;
+}
+.phpbb .polls dt {
+	width: 95%;
+	clear: left;
+	padding-left: 0;
+}
+.phpbb .polls dd {
+	width: 20%;
+}
+.phpbb .polls dd.resultbar {
+	width: 50%;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.ie7 .phpbb .polls dl, .ie7 .phpbb .polls dt, .ie7 .phpbb .polls dd {
+	display: block;
+}
+.ie7 .phpbb .polls dt, .ie7 .phpbb .polls dd {
+	float: left;
+}
+.ie7 .phpbb .polls dt {
+	width: 30%;
+}
+.ie7 .phpbb .polls dd {
+	width: 10%;
+}
+.ie7 .phpbb .polls dd.resultbar {
+	width: 45%;
+}
+
+.phpbb .polls dd.resultbar > div {
+	min-width: 10px;
+	padding: 3px 4px 2px;
+	border: 0px solid transparent;
+	border-radius: 6px;
+	text-align: right;
+	line-height: 1em;
+	font-size: 12px;
+	font-family: Arial;
+	background: transparent none 0 50% repeat-x;
+}
+
+.phpbb .polls dl.votes dt { 
+	display: none; 
+}
+.phpbb .polls dl.votes dd { 
+	text-align: center;
+	width: 100%;
+	padding-top: 0;
+}
+.phpbb .content p.author {
+	color: #808080;
+}
+
+
+/*
+	Posts
+*/
+.phpbb .post+hr.divider {
+	display: none;
+}
+
+.phpbb p.author {
+	font-size: 12px;
+	line-height: 1.5em;
+	padding: 0;
+}
+
+.phpbb .post {
+	margin: 6px 0;
+	clear: both;
+	position: relative;
+}
+.phpbb .post-content-wrap {
+	display: table;
+	width: 100%;
+	max-width: 100%;
+}
+.phpbb .post-content-wrap > span {
+	display: none;
+}
+.phpbb .post-content-wrap > .postbody {
+	display: table-cell;
+	vertical-align: top;
+	width: 100%;
+	padding-bottom: 10px;
+}
+.phpbb .profile + .postbody {
+	border-left: 1px solid transparent;
+	padding-left: 10px;
+	padding-right: 6px;
+}
+.phpbb .post {
+	border: 1px solid transparent;
+	border-radius: 6px;
+	padding: 0;
+	word-wrap: break-word;
+}
+.phpbb .post-content-wrap > .postprofile, .phpbb .post-content-wrap > .profile {
+	display: table-cell;
+	vertical-align: top;
+	min-width: 190px;
+	vertical-align: top;
+	padding-bottom: 10px;
+}
+.phpbb .post .postprofile {
+	padding: 0 4px 4px 0;
+	word-wrap: break-word;
+}
+
+.ie7 .phpbb .post-content-wrap {
+	display: block;
+}
+.ie7 .phpbb .post-content-wrap > .profile {
+	display: block;
+	float: left;
+	width: 190px;
+}
+.ie7 .phpbb .post-content-wrap > .postbody {
+	display: block;
+	margin-left: 200px;
+	clear: none;
+	width: auto;
+}
+.ie7 .phpbb #topicreview .post .postbody, .ie7 .phpbb #prev

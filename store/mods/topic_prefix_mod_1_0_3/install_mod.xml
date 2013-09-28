@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
+<!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
+	<header>
+		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
+		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
+		<title lang="en"><![CDATA[Topic Prefix MOD]]></title>
+		<description lang="en"><![CDATA[This MOD adds topics prefixes on your board. You can set topics prefixes on the forum edit page in ACP. You can also choose if the topic prefix is required.]]></description>
+		<description lang="pl"><![CDATA[Mod dodaje do Twojej witryny prefiksy tematów. Prefiksy są ustalane na stronie zmieniania forum w panelu administracji. Można też określić czy prefiks jest wymagany.]]></description>
+		<author-group>
+			<author>
+				<realname><![CDATA[Dariusz Maciejewski]]></realname>
+				<username><![CDATA[daroPL]]></username>
+				<homepage><![CDATA[http://www.phpbb.pl]]></homepage>
+				<email><![CDATA[dariuszwm@gmail.com]]></email>
+			</author>
+		</author-group>
+		<mod-version>1.0.3</mod-version>
+		<installation>
+			<level>easy</level>
+			<time>600</time>
+			<target-version>3.0.9</target-version>
+		</installation>
+		<link-group>
+			<link type="language" href="contrib/pl.xml" lang="pl">Instalacja moda</link>
+         <link type="contrib" href="contrib/update_v1.0.2_to_v1.0.3.xml" lang="en">Update instruction from v1.0.2 to v1.0.3</link>
+		</link-group>
+	</header>
+	<action-group>
+		<sql><![CDATA[ALTER TABLE phpbb_forums ADD forum_topic_prefixes mediumtext;]]></sql>
+		<sql><![CDATA[ALTER TABLE phpbb_forums ADD forum_topic_prefix_required tinyint(1) UNSIGNED DEFAULT '0' NOT NULL;]]></sql>
+		<sql><![CDATA[ALTER TABLE phpbb_topics ADD topic_prefix varchar(120) DEFAULT '';]]></sql>
+		<copy>
+			<file from="root/language/en/mods/topic_prefix.php" to="language/en/mods/topic_prefix.php"/>
+			<file from="root/language/en/mods/acp_topic_prefix.php" to="language/en/mods/acp_topic_prefix.php"/>
+		</copy>
+		<open src="posting.php">
+			<edit>
+				<find><![CDATA[$user->setup(array('posting', 'mcp', 'viewtopic'), $post_data['forum_style']);]]></find>
+				<action type="after-add"><![CDATA[$user->add_lang('mods/topic_prefix');]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[$uninit = array('post_attachment' => 0, 'poster_id' => $user->data['user_id'], 'enable_magic_url' => 0, 'topic_status' => 0, 'topic_type' => POST_NORMAL, 'post_subject' => '', 'topic_title' => '', 'post_time' => 0, 'post_edit_reason' => '', 'notify_set' => 0);]]></find>
+				<inline-edit>
+					<inline-find><![CDATA['topic_title' => '']]></inline-find>
+					<inline-action type="after-add"><![CDATA[, 'topic_prefix' => '']]></inline-action>
+				</inline-edit>
+			</edit>		
+			<edit>
+				<find><![CDATA[	$post_data['topic_type']		= request_var('topic_type', (($mode != 'post') ? (int) $post_data['topic_type'] : POST_NORMAL));]]></find>
+				<action type="after-add"><![CDATA[	$post_data['topic_prefix']		= utf8_normalize_nfc(request_var('topic_prefix', '', true));]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[	$post_data['poll_last_vote'] = (isset($post_data['poll_last_vote'])) ? $post_data['poll_last_vote'] : 0;]]></find>
+				<action type="before-add"><![CDATA[	if ($mode == 'post' && $post_data['forum_topic_prefix_required'] && empty($post_data['topic_prefix']))
+	{
+		$error[] = $user->lang['EMPTY_TOPIC_PREFIX'];
+	}]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[				'post_id'				=> (int) $post_id,]]></find>
+				<action type="before-add"><![CDATA[				'topic_prefix'			=> (string) $post_data['topic_prefix'],]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[$notify_checked		= (isset($notify)) ? $notify : (($mode == 'post') ? $user->data['user_notify'] : $notify_set);]]></find>
+				<action type="after-add"><![CDATA[$forum_topic_prefixes = explode(';', $post_data['forum_topic_prefixes']);
+$topic_prefix_select = (!$post_data['forum_topic_prefix_required']) ? '<option value="">' . $user->lang['NO_TOPIC_PREFIX'] . '</option>' : '<option value="0">' . $user->lang['SELECT_TOPIC_PREFIX'] . '</option>';
+foreach ($forum_topic_prefixes as $topic_prefix)
+{
+	$topic_prefix_select .= '<option value="' . $topic_prefix . '"' . (($post_data['topic_prefix'] == $topic_prefix) ? ' selected="selected"' : '') . '>' . $topic_prefix . '</option>';
+}]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[	'TOPIC_TITLE'			=> censor_text($post_data['topic_title']),]]></find>
+				<action type="after-add"><![CDATA[	'TOPIC_PREFIX_SELECT'	=> ($post_data['forum_topic_prefixes']) ? $topic_prefix_select : '',]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[	'S_POST_ACTION'			=> $s_action,]]></find>
+				<action type="after-add"><![CDATA[	'S_TOPIC_POST_ACTION'	=> ($mode == 'post' || ($mode == 'edit' && $post_id == $post_data['topic_first_post_id'])) ? true : false,]]></action>
+			</edit>
+		</open>
+		<open src="search.php">
+			<edit>
+				<find><![CDATA[				'TOPIC_TITLE'		=> $topic_title,]]></find>
+				<action type="after-add"><![CDATA[				'TOPIC_PREFIX'		=> (!empty($row['topic_prefix'])) ? '[' . $row['topic_prefix'] . ']' : false,]]></action>
+			</edit>
+		</open>
+		<open src="viewforum.php">
+			<edit>
+				<find><![CDATA[			'TOPIC_TITLE'		=> censor_text($row['topic_title']),]]></find>
+				<action type="after-add"><![CDATA[			'TOPIC_PREFIX'		=> (!empty($row['topic_prefix'])) ? '[' . $row['topic_prefix'] . ']' : false,]]></action>
+			</edit>
+		</open>
+		<open src="viewtopic.php">
+			<edit>
+				<find><![CDATA[	'TOPIC_TITLE' 	=> $topic_data['topic_title'],]]></find>
+				<action type="after-add"><![CDATA[	'TOPIC_PREFIX'	=> (!empty($topic_data['topic_prefix'])) ? '[' . $topic_data['topic_prefix'] . ']' : false,]]></action>
+			</edit>
+		</open>
+		<open src="adm/style/acp_forums.html">
+			<edit>
+				<find><![CDATA[		<dl>
+			<dt><label for="topics_per_page">{L_FORUM_TOPICS_PAGE}:</label><br /><span>{L_FORUM_TOPICS_PAGE_EXPLAIN}</span></dt>
+			<dd><input type="text" id="topics_per_page" name="topics_per_page" value="{TOPICS_PER_PAGE}" size="4" maxlength="4" /></dd>
+		</dl>]]></find>
+				<action type="after-add"><![CDATA[		<dl>
+			<dt><label for="forum_topic_prefixes">{L_FORUM_TOPIC_PREFIXES}:</label><br /><span>{L_FORUM_TOPIC_PREFIXES_EXPLAIN}</span></dt>
+			<dd><textarea id="forum_topic_prefixes" name="forum_topic_prefixes" rows="5" cols="45">{FORUM_TOPIC_PREFIXES}</textarea></dd>
+		</dl>
+		<dl>
+			<dt><label for="forum_topic_prefix_required">{L_FORUM_TOPIC_PREFIX_REQUIRED}:</label><br /><span>{L_FORUM_TOPIC_PREFIX_REQUIRED_EXPLAIN}</span></dt>
+			<dd><label><input type="radio" class="radio" name="forum_topic_prefix_required" value="1"<!-- IF S_TOPIC_PREFIX_REQUIRED --> id="forum_topic_prefix_required" checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="forum_topic_prefix_required" value="0"<!-- IF not S_TOPIC_PREFIX_REQUIRED --> id="forum_topic_prefix_required" checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+		</dl>]]></action>
+			</edit>
+		</open>
+		<open src="includes/functions_posting.php">
+			<edit>
+				<find><![CDATA[				'topic_title'				=> $subject,]]></find>
+				<action type="after-add"><![CDATA[				'topic_prefix'				=> $data['topic_prefix'],]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[				'topic_title'				=> $subject,]]></find>
+				<action type="after-add"><![CDATA[				'topic_prefix'				=> $data['topic_prefix'],]]></action>
+			</edit>
+		</open>
+		<open src="includes/acp/acp_forums.php">
+			<edit>
+				<find><![CDATA[		$user->add_lang('acp/forums');]]></find>
+				<action type="after-add"><![CDATA[		$user->add_lang('mods/acp_topic_prefix');]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[						'enable_quick_reply'	=> request_var('enable_quick_reply', false),]]></find>
+				<action type="after-add"><![CDATA[						'forum_topic_prefixes'			=> utf8_normalize_nfc(request_var('forum_topic_prefixes', '', true)),
+						'forum_topic_prefix_required'	=> request_var('forum_topic_prefix_required', false),]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[					// Get data for forum rules if specified...
+					if ($forum_data['forum_rules'])
+					{
+						generate_text_for_storage($forum_data['forum_rules'], $forum_data['forum_rules_uid'], $forum_data['forum_rules_bitfield'], $forum_data['forum_rules_options'], request_var('rules_parse_bbcode', false), request_var('rules_parse_urls', false), request_var('rules_parse_smilies', false));
+					}]]></find>
+				<action type="after-add"><![CDATA[					if ($forum_data['forum_topic_prefixes'])
+					{
+						$forum_data['forum_topic_prefixes'] = str_replace("\n", ';', $forum_data['forum_topic_prefixes']);
+					}]]></action>
+			</edit>
+			<edit>
+				<find><![CDATA[							'forum_password'		=> '',
+							'forum_password_confirm'=> '',]]></find>
+				<action type="after-add"><![CDATA[                     'forum_topic_prefixes'        => '',
+                     'forum_topic_prefix_required' => 0,]]></action>
+			</edit>           
+			<edit>
+				<find><![CDATA[					'FORUM_RULES'				=> $forum_data['forum_rules'],]]></find>
+				<action type="after-add"><![CDATA[					'FORUM_TOPIC_PREFIXES'		=> str_replace(';', "\n", $forum_data['forum_topic_prefixes']),
+					'S_TOPIC_PREFIX_REQUIRED'	=> ($forum_data['forum_topic_prefix_required']) ? true : false,]]></action>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/posting_editor.html">
+			<edit>
+				<find><![CDATA[		<dd><input type="text" name="subject" id="subject" size="45" maxlength="<!-- IF S_NEW_MESSAGE -->60<!-- ELSE -->64<!-- ENDIF -->" tabindex="2" value="{SUBJECT}{DRAFT_SUBJECT}" class="inputbox autowidth" /></dd>]]></find>
+				<inline-edit>
+					<inline-find><![CDATA[<input type="text" name="subject" id="subject" size="45" maxlength="<!-- IF S_NEW_MESSAGE -->60<!-- ELSE -->64<!-- ENDIF -->" tabindex="2" value="{SUBJECT}{DRAFT_SUBJECT}" class="inputbox autowidth" />]]></inline-find>
+					<inline-action type="before-add"><![CDATA[<!-- IF TOPIC_PREFIX_SELECT and S_TOPIC_POST_ACTION --><select name="topic_prefix">{TOPIC_PREFIX_SELECT}</select> <!-- ENDIF -->]]></inline-action>
+				</inline-edit>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/search_results.html">
+			<edit>
+				<find><![CDATA[						<a href="{searchresults.U_VIEW_TOPIC}" class="topictitle">{searchresults.TOPIC_TITLE}</a> {searchresults.ATTACH_ICON_IMG}]]></find>
+				<inline-edit>
+					<inline-find><![CDATA[{searchresults.TOPIC_TITLE}]]></inline-find>
+					<inline-action type="before-add"><![CDATA[<!-- IF searchresults.TOPIC_PREFIX -->{searchresults.TOPIC_PREFIX} <!-- ENDIF -->]]></inline-action>
+				</inline-edit>
+			</edit>
+			<edit>
+				<find><![CDATA[				<dd>{L_TOPIC}: <a href="{searchresults.U_VIEW_TOPIC}">{searchresults.TOPIC_TITLE}</a></dd>]]></find>
+				<inline-edit>
+					<inline-find><![CDATA[{searchresults.TOPIC_TITLE}]]></inline-find>
+					<inline-action type="before-add"><![CDATA[<!-- IF searchresults.TOPIC_PREFIX -->{searchresults.TOPIC_PREFIX} <!-- ENDIF -->]]></inline-action>
+				</inline-edit>
+			</edit>
+			<edit>
+				<find><![CDATA[				<dd>{L_GLOBAL}: <a href="{searchresults.U_VIEW_TOPIC}">{searchresults.TOPIC_TITLE}</a></dd>]]></find>
+				<inline-edit>
+					<inline-find><![CDATA[{searchresults.TOPIC_TITLE}]]></inline-find>
+					<inline-action type="before-add"><![CDATA[<!-- IF searchresults.TOPIC_PREFIX -->{searchresults.TOPIC_PREFIX} <!-- ENDIF -->]]></inline-action>
+				</inline-edit>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/viewforum_body.html">
+			<edit>
+				<find><![CDATA[<dt<!-- IF topicrow.TOPIC_ICON_IMG and S_TOPIC_ICONS --> style="background-image: url({T_ICONS_PATH}{topicrow.TOPIC_ICON_IMG}); background-repeat: no-repeat;"<!-- ENDIF --> title="{topicrow.TOPIC_FOLDER_IMG_ALT}"><!-- IF topicrow.S_UNREAD_TOPIC --><a href="{topicrow.U_NEWEST_POST}">{NEWEST_POST_IMG}</a> <!-- ENDIF --><a href="{topicrow.U_VIEW_TOPIC}" class="topictitle">{topicrow.TOPIC_TITLE}</a>]]></find>
+				<inline-edit>
+					<inline-find><![CDATA[<a href="{topicrow.U_VIEW_TOPIC}" class="topictitle">{topicrow.TOPIC_TITLE}</a>]]></inline-find>
+					<inline-action type="replace-with"><![CDATA[<a href="{topicrow.U_VIEW_TOPIC}" class="topictitle"><!-- IF topicrow.TOPIC_PREFIX -->{topicrow.TOPIC_PREFIX} <!-- ENDIF -->{topicrow.TOPIC_TITLE}</a>]]></inline-action>
+				</inline-edit>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/viewtopic_body.html">
+			<edit>
+				<find><![CDATA[<h2><a href="{U_VIEW_TOPIC}">{TOPIC_TITLE}</a></h2>]]></find>
+				<action type="replace-with"><![CDATA[<h2><a href="{U_VIEW_TOPIC}"><!-- IF TOPIC_PREFIX -->{TOPIC_PREFIX}<!-- ENDIF --> {TOPIC_TITLE}</a></h2>]]></action>
+			</edit>
+		</open>
+		<diy-instructions lang="en"><![CDATA[Purge the cache!]]></diy-instructions>
+		<diy-instructions lang="pl"><![CDATA[Wyczyść bufor!]]></diy-instructions>
+	</action-group>
+</mod>
