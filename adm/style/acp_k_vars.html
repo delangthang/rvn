@@ -44,6 +44,18 @@
 	</dl>
 </fieldset>
 
+<!-- Them lua chon tat random logo vao ACP -->
+<fieldset>
+   <legend>{L_PORTAL_LOGOS}</legend>
+   <dl>
+      <dt><label for="k_allow_rotating_logos">{L_RAND_LOGOS}:</label><br /><span>{L_RAND_LOGOS_EXPLAIN}</span></dt>
+      <dd>
+         <label><input type="radio" class="radio" id="k_allow_rotating_logos" name="k_allow_rotating_logos" value="1" <!-- IF S_K_ALLOW_ROTATING_LOGOS --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+         <label><input type="radio" class="radio" id="k_allow_rotating_logos" name="k_allow_rotating_logos" value="0" <!-- IF not S_K_ALLOW_ROTATING_LOGOS --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+      </dd>
+   </dl>
+</fieldset>
+
 <fieldset>
 	<legend>{L_BLOCK_CACHE_TIME_HEAD}</legend>
 	<dl>
