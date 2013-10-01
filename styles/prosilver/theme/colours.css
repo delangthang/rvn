@@ -6,6 +6,11 @@ Colours and backgrounds for common.css
 html, body {
 	color: #536482;
 	background-color: #FFFFFF;
+	background-image: url("{T_THEME_PATH}/images/fwall.jpg");
+	background-size:100%;
+	background-repeat: no-repeat;
+	background-position: top center;
+	background-attachment: fixed;
 }
 
 h1 {
@@ -48,8 +53,8 @@ hr.dashed {
 /* Round cornered boxes and backgrounds
 ---------------------------------------- */
 .headerbar {
-	background-color: #12A3EB;
-	background-image: url("{T_THEME_PATH}/images/bg_header.gif");
+	/* background-color: #12A3EB;
+	background-image: url("{T_THEME_PATH}/images/bg_header.gif"); */
 	color: #FFFFFF;
 }
 
@@ -92,7 +97,7 @@ hr.dashed {
 	background-color: #E7E8EA;
 }
 
-span.corners-top {
+/* span.corners-top {
 	background-image: url("{T_THEME_PATH}/images/corners_left.png");
 }
 
@@ -106,7 +111,7 @@ span.corners-bottom {
 
 span.corners-bottom span {
 	background-image: url("{T_THEME_PATH}/images/corners_right.png");
-}
+} */
 
 /* Horizontal lists
 ----------------------------------------*/
@@ -653,6 +658,11 @@ fieldset.polls dd div {
 
 .online {
 	background-image: url("{IMG_ICON_USER_ONLINE_SRC}");
+	margin-top: -5px;
+}
+
+.online dt {
+   margin-top: 5px;
 }
 
 /*  	
